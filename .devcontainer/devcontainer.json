@@ -1,0 +1,11 @@
+{
+  "name": "Team Codespace",
+  "image": "://microsoft.com",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vsliveshare.vsliveshare"
+      ]
+    }
+  }
+}
