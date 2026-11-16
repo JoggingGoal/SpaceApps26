@@ -1,0 +1,34 @@
+THE GREEN REVOLUTION - CONSOLIDATED PROJECT RECOVERY
+
+This bundle combines the latest integrated four-page project with the
+final V5 rotation engine patch from the conversation.
+
+Files:
+  HOME/home.html
+  MAP/map.html
+  SCIENTIFIC_INFO/science.html
+  SIMULATIONS/simulations.html
+  app.py
+  farmwise_backend.py
+  assets/ (styles, scripts, globe textures, offline world map)
+  tests/
+
+When GitHub Codespaces reconnects:
+1. Open Terminal in /workspaces/SpaceApps26
+2. Commit/back up any unique current files before overwriting.
+3. Upload the ZIP into the root of SpaceApps26.
+4. Run: unzip -o Green_Revolution_All_Pages_Final_Recovery.zip
+5. Run: python3 app.py
+6. Open port 8000 -> /HOME/home.html
+
+If rebuilding a brand-new empty repository, extract these files into its
+repository root (not into an extra nested folder).
+
+Notes:
+- Existing API keys are not required for NASA POWER or the city geocoding.
+- NASA API requests need live network connectivity in the Codespace.
+- The final rotation engine uses heuristic screening scores, not validated
+  yield or profit forecasts.
+- This is a recovery snapshot from the project artifacts created in this
+  conversation. It will not include changes you made directly in Codespaces
+  after those artifacts were generated.

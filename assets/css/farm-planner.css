@@ -1,0 +1,200 @@
+#farm-planner{color-scheme: light;
+      --ink: #1d3025;
+      --muted: #647267;
+      --paper: #f5f5ec;
+      --card: #fffefa;
+      --line: #e4e6d9;
+      --green: #2d6547;
+      --green-light: #e8f1e8;
+      --lime: #c4d979;
+      --amber: #f0dfb8;
+      --shadow: 0 16px 44px rgb(34 53 38 / 7%);}
+#farm-planner *{box-sizing: border-box;}
+#farm-planner{margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 16px/1.5 "Avenir Next", Avenir, "Segoe UI", sans-serif;}
+#farm-planner button,
+#farm-planner input,
+#farm-planner select{font: inherit;}
+#farm-planner button{cursor: pointer;}
+#farm-planner a{color: var(--green);}
+#farm-planner .shell{max-width: 1180px; margin: 0 auto; padding: 28px 30px 64px;}
+#farm-planner .topbar{display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 48px;}
+#farm-planner .brand{display: flex; align-items: center; gap: 11px; font-size: 15px; font-weight: 750; letter-spacing: -.02em;}
+#farm-planner .brand-mark{display: grid; width: 36px; height: 36px; place-items: center; border-radius: 12px; background: var(--green); color: white;}
+#farm-planner .top-note{color: var(--muted); font-size: 13px;}
+#farm-planner .hero{display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 36px; align-items: end; margin-bottom: 34px;}
+#farm-planner .eyebrow{margin: 0 0 10px; color: var(--green); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;}
+#farm-planner h1{max-width: 700px; margin: 0; font-size: clamp(36px, 5vw, 58px); font-weight: 650; letter-spacing: -.055em; line-height: 1.04;}
+#farm-planner .hero p:not(.eyebrow){max-width: 650px; margin: 18px 0 0; color: var(--muted); font-size: 16px;}
+#farm-planner .hero-note{padding: 18px 19px; border: 1px solid var(--line); border-radius: 18px; background: rgb(255 254 250 / 65%); color: var(--muted); font-size: 13px;}
+#farm-planner .hero-note strong{display: block; margin-bottom: 5px; color: var(--ink); font-size: 14px;}
+#farm-planner .layout{display: grid; grid-template-columns: minmax(0, .9fr) minmax(430px, 1.1fr); gap: 22px; align-items: start;}
+#farm-planner .panel{border: 1px solid var(--line); border-radius: 20px; background: var(--card); box-shadow: var(--shadow);}
+#farm-planner .form-panel{padding: 25px;}
+#farm-planner .results-panel{position: sticky; top: 18px; padding: 25px;}
+#farm-planner .section-heading{display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; margin-bottom: 22px;}
+#farm-planner .section-heading h2{margin: 0; font-size: 20px; letter-spacing: -.025em;}
+#farm-planner .section-heading p{margin: 5px 0 0; color: var(--muted); font-size: 13px;}
+#farm-planner .step{display: grid; width: 29px; height: 29px; flex: 0 0 auto; place-items: center; border-radius: 10px; background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 800;}
+#farm-planner .subsection{padding: 20px 0; border-top: 1px solid var(--line);}
+#farm-planner .subsection:first-of-type{padding-top: 0; border-top: 0;}
+#farm-planner .subsection-title{margin: 0 0 14px; font-size: 14px; font-weight: 750;}
+#farm-planner .fields{display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px 14px;}
+#farm-planner .field{min-width: 0;}
+#farm-planner .field.wide{grid-column: 1 / -1;}
+#farm-planner label,
+#farm-planner .label{display: block; margin-bottom: 6px; color: #39483d; font-size: 12px; font-weight: 700;}
+#farm-planner .optional{color: #879087; font-weight: 500;}
+#farm-planner input[type="text"],
+#farm-planner input[type="number"],
+#farm-planner input[type="search"],
+#farm-planner select{width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid #dfe3d8; border-radius: 10px; outline: none; background: #fff; color: var(--ink);}
+#farm-planner input:focus,
+#farm-planner select:focus,
+#farm-planner button:focus-visible,
+#farm-planner a:focus-visible{outline: 3px solid rgb(100 145 82 / 35%); outline-offset: 2px;}
+#farm-planner .hint{margin: 5px 0 0; color: #7b857c; font-size: 11px;}
+#farm-planner .unit-input{position: relative;}
+#farm-planner .unit-input input{padding-right: 52px;}
+#farm-planner .unit{position: absolute; top: 50%; right: 12px; transform: translateY(-50%); color: #7b857c; font-size: 11px; pointer-events: none;}
+#farm-planner .coord-row{display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px;}
+#farm-planner .small-button{padding: 0 11px; border: 1px solid var(--line); border-radius: 10px; background: white; color: var(--green); font-size: 12px; font-weight: 700;}
+#farm-planner .small-button:disabled{cursor: not-allowed; opacity: .5;}
+#farm-planner .map-box{overflow: hidden; min-height: 150px; margin-top: 11px; border: 1px solid var(--line); border-radius: 14px; background: #f1f3eb;}
+#farm-planner .map-placeholder{display: grid; min-height: 150px; place-content: center; justify-items: center; gap: 7px; padding: 16px; text-align: center;}
+#farm-planner .map-placeholder span:first-child{font-size: 24px;}
+#farm-planner .map-placeholder p{margin: 0; color: var(--muted); font-size: 12px;}
+#farm-planner .map-actions{display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-top: 9px;}
+#farm-planner .map-actions .hint{margin: 0;}
+#farm-planner .map-link{font-size: 12px; font-weight: 700; white-space: nowrap;}
+#farm-planner iframe.map-frame{display: block; width: 100%; height: 190px; border: 0;}
+#farm-planner fieldset{min-width: 0; margin: 0; padding: 0; border: 0;}
+#farm-planner .check-grid{display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px;}
+#farm-planner .check{display: flex; align-items: flex-start; gap: 8px; color: #465449; font-size: 12px;}
+#farm-planner .check input{margin: 3px 0 0; accent-color: var(--green);}
+#farm-planner .field-details,
+#farm-planner .crop-picker{border-top: 1px solid var(--line);}
+#farm-planner .field-details summary,
+#farm-planner .crop-picker summary{padding: 17px 0 5px; color: var(--green); font-size: 13px; font-weight: 750; cursor: pointer;}
+#farm-planner .tuning-intro{margin: 7px 0 15px; color: var(--muted); font-size: 12px;}
+#farm-planner .crop-picker-content{padding: 13px 0 4px;}
+#farm-planner .crop-picker-content > label:not(:first-child){margin-top: 12px;}
+#farm-planner .crop-count{color: var(--muted); font-size: 11px; font-weight: 550;}
+#farm-planner #available-crops{min-height: 170px; padding: 7px;}
+#farm-planner #available-crops option{padding: 4px;}
+#farm-planner .nasa-fetch{padding: 0 0 15px;}
+#farm-planner .nasa-fetch p{margin-top: 7px;}
+#farm-planner .nasa-fetch a{font-weight: 700;}
+#farm-planner .results-title{margin: 0; font-size: 22px; letter-spacing: -.035em;}
+#farm-planner .results-subtitle{margin: 5px 0 18px; color: var(--muted); font-size: 13px;}
+#farm-planner .result-status{min-height: 40px; margin: 0 0 13px; padding: 10px 12px; border-radius: 11px; background: var(--green-light); color: #315940; font-size: 12px;}
+#farm-planner .plan-list{display: grid; gap: 12px;}
+#farm-planner .plan{padding: 15px; border: 1px solid var(--line); border-radius: 15px; background: white;}
+#farm-planner .plan-top{display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;}
+#farm-planner .plan h3{margin: 0; font-size: 15px;}
+#farm-planner .plan-description{margin: 4px 0 0; color: var(--muted); font-size: 11px;}
+#farm-planner .score{flex: 0 0 auto; padding: 5px 8px; border-radius: 9px; background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 800;}
+#farm-planner .seasons{display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 13px;}
+#farm-planner .season{min-height: 58px; padding: 8px; border-radius: 10px; background: #f5f6ef;}
+#farm-planner .season span{display: block; color: #7c867c; font-size: 9px; font-weight: 700; text-transform: uppercase;}
+#farm-planner .season strong{display: block; margin-top: 4px; font-size: 10px; line-height: 1.25;}
+#farm-planner .plan-reason{margin: 11px 0 0; color: #59665c; font-size: 11px;}
+#farm-planner .score-breakdown{display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px;}
+#farm-planner .score-chip{padding: 3px 7px; border-radius: 7px; background: #f2f3ed; color: #566257; font-size: 9px;}
+#farm-planner .empty-state{padding: 30px 18px; border: 1px dashed #d7ddce; border-radius: 15px; color: var(--muted); text-align: center; font-size: 13px;}
+#farm-planner .actions{display: flex; justify-content: flex-end; gap: 9px; margin-top: 17px;}
+#farm-planner .button{min-height: 42px; padding: 0 16px; border: 0; border-radius: 11px; background: var(--green); color: white; font-weight: 750;}
+#farm-planner .button.secondary{border: 1px solid var(--line); background: white; color: var(--ink);}
+#farm-planner .notice{margin: 17px 0 0; padding: 12px; border-radius: 11px; background: #f8f4e9; color: #736443; font-size: 11px;}
+#farm-planner footer{display: flex; justify-content: space-between; gap: 15px; margin-top: 22px; color: #7c867c; font-size: 11px;}
+#farm-planner [hidden]{display: none !important;}
+@media (max-width: 860px){#farm-planner .layout{grid-template-columns: 1fr;}#farm-planner .results-panel{position: static;}#farm-planner .hero{grid-template-columns: 1fr;}#farm-planner .hero-note{max-width: 420px;}}
+@media (max-width: 540px){#farm-planner .shell{padding: 20px 14px 40px;}#farm-planner .topbar{margin-bottom: 33px;}#farm-planner .top-note{max-width: 150px; text-align: right;}#farm-planner .form-panel,
+#farm-planner .results-panel{padding: 19px;}#farm-planner .fields{gap: 12px 9px;}#farm-planner .coord-row{grid-template-columns: 1fr 1fr;}#farm-planner .coord-row button{grid-column: 1 / -1; min-height: 38px;}#farm-planner .seasons{gap: 4px;}#farm-planner .season{padding: 7px 5px;}#farm-planner .check-grid{gap: 10px 6px;}#farm-planner footer{flex-direction: column;}}
+
+/* Green Revolution integration and accessible autocomplete */
+.farm-page{background:#f5f5ec;padding:18px 0 74px;color:#1d3025;}
+#farm-planner{--paper:#f5f5ec;--card:#fffefa;--green:#235c3c;--ink:#163729;}
+#farm-planner .shell{max-width:1280px;padding:24px 26px 70px;}
+#farm-planner .hero{margin-top:12px;}
+#farm-planner .hero h1{font-family:Georgia,'Times New Roman',serif;font-weight:500;font-size:clamp(38px,5vw,66px);letter-spacing:-.045em;}
+#farm-planner .hero-note{border-radius:16px;background:#e8efe3;}
+#farm-planner .farm-trust{display:flex;gap:11px;flex-wrap:wrap;margin:-8px 0 26px;}
+#farm-planner .farm-trust span{background:#e5efe4;color:#306348;border-radius:30px;padding:6px 13px;font-size:11px;font-weight:750;}
+#farm-planner .farm-city-results{position:relative;z-index:30;border:1px solid #cddccc;border-radius:12px;background:white;max-height:230px;overflow-y:auto;box-shadow:0 12px 32px #1b3e2724;margin-top:6px;}
+#farm-planner .farm-city-results button{display:block;width:100%;text-align:left;background:white;border:0;border-bottom:1px solid #eaf0e6;padding:10px 13px;color:#123b2b;cursor:pointer;}
+#farm-planner .farm-city-results button:hover,#farm-planner .farm-city-results button[aria-selected="true"]{background:#e9f3e6;}
+#farm-planner .farm-city-results strong{display:block;font-size:13px;}
+#farm-planner .farm-city-results small{display:block;color:#718776;font-size:11px;}
+#farm-planner .current-crop-fields{margin-top:14px;}
+#farm-planner .farm-climate-summary,#farm-planner .farm-decision,#farm-planner .farm-actions,#farm-planner .farm-weather-chart{border:1px solid #dce7dc;border-radius:14px;padding:16px;margin-bottom:15px;background:#f6faf3;}
+#farm-planner .farm-decision{background:#e5f2e6;border-color:#b1d1b4;}
+#farm-planner .farm-decision h3{font-family:Georgia,serif;font-size:24px;font-weight:500;margin:2px 0 9px;line-height:1.15;}
+#farm-planner .farm-decision p{font-size:12px;color:#486453;line-height:1.6;margin:6px 0;}
+#farm-planner .farm-action-item{padding:12px 0;border-top:1px solid #dce7dc;}
+#farm-planner .farm-action-item strong{display:block;color:#174c34;font-size:13px;}
+#farm-planner .farm-action-item p{margin:5px 0;color:#52665a;font-size:12px;line-height:1.5;}
+#farm-planner .farm-annual-bars{display:flex;align-items:end;gap:6px;min-height:135px;padding:10px 0 0;}
+#farm-planner .farm-bar-col{flex:1;text-align:center;min-width:0;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:5px;height:130px;}
+#farm-planner .farm-bar{width:80%;max-width:28px;border-radius:5px 5px 0 0;background:#5b9970;min-height:3px;}
+#farm-planner .farm-bar-col span{font-size:9px;color:#667e6b;}
+#farm-planner .farm-climate-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:9px 0;}
+#farm-planner .farm-climate-metrics div{padding:9px;border-radius:8px;background:#fff;}
+#farm-planner .farm-climate-metrics strong{display:block;font-size:17px;color:#153b2c;}
+#farm-planner .farm-climate-metrics span{font-size:10px;color:#607568;}
+#farm-planner .farm-best{border:2px solid #4d9769;background:#f1faf0;}
+#farm-planner .farm-secondary-action{min-height:32px;margin:7px 7px 0 0;}
+#farm-planner .map-box img{display:block;width:100%;height:165px;object-fit:cover;}
+#farm-planner .results-panel{top:90px;}
+#farm-planner .form-panel{box-shadow:0 16px 36px #193e2512;}
+#farm-planner .plan h3{font-size:16px;color:#173c2a;}
+#farm-planner .plan .plan-reason{font-size:12px;}
+#farm-planner a:focus-visible,#farm-planner button:focus-visible{outline:3px solid #78ac83;outline-offset:3px;}
+@media(max-width:860px){#farm-planner .results-panel{position:static;}#farm-planner .farm-climate-metrics{grid-template-columns:1fr 1fr;}}
+@media(prefers-reduced-motion:reduce){#farm-planner *,#farm-planner *::before,#farm-planner *::after{animation:none!important;transition:none!important;}}
+
+#farm-planner .hero{background:linear-gradient(115deg,#0a251a,#173f2b);border-radius:22px;padding:36px 38px;color:#fff;overflow:hidden;min-height:235px;align-items:center;}
+#farm-planner .hero h1{color:#f5f7ed;}
+#farm-planner .hero .eyebrow{color:#b1dcb8;}
+#farm-planner .hero p:not(.eyebrow){color:#d2e5d7;font-size:15px;}
+#farm-planner .hero-note{background:#e1eddd;color:#355345;}
+#farm-planner .map-box{background:#e5f0e9;}
+#farm-planner .map-box .map-placeholder{min-height:55px;}
+#farm-planner .map-box img{object-fit:contain;background:#edf2e9;}
+#farm-planner .farm-annual-bars .farm-bar-col span{letter-spacing:-.01em;}
+@media(max-width:600px){#farm-planner .hero{padding:25px 19px;}#farm-planner .shell{padding:10px 13px 40px;}}
+
+/* Required crop-choice picker: searchable checkboxes and persistent selections */
+#farm-planner .farm-required-tag{display:inline-block;font:700 10px/1.5 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.09em;background:#d6ecdc;color:#1a5536;border-radius:99px;padding:4px 9px;margin-left:8px;vertical-align:middle;}
+#farm-planner .farm-select-intro{font-size:13px;line-height:1.6;color:#41574a;margin:6px 0 16px;}
+#farm-planner .farm-choice-field{max-width:100%;}
+#farm-planner .farm-crop-options{max-height:245px;overflow:auto;display:grid;gap:4px;border:1px solid #cfddce;border-radius:12px;background:#fff;padding:8px;margin:11px 0;}
+#farm-planner .farm-crop-option{display:grid;grid-template-columns:20px minmax(120px,1fr);gap:6px 10px;align-items:center;border-radius:8px;padding:8px 10px;color:#1f4632;cursor:pointer;margin:0;}
+#farm-planner .farm-crop-option:hover,#farm-planner .farm-crop-option:focus-within{background:#edf5ed;}
+#farm-planner .farm-crop-option input{grid-row:1/span 2;width:16px;height:16px;accent-color:#246c43;}
+#farm-planner .farm-crop-option .farm-crop-item-label{font-size:13px;font-weight:650;}
+#farm-planner .farm-crop-option small{font-size:10px;color:#6a7d6d;grid-column:2;}
+#farm-planner .farm-selected-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+#farm-planner .farm-selected-chips:empty{display:none;}
+#farm-planner .farm-crop-chip{border:1px solid #adcdb8;background:#e6f3e7;color:#205437;border-radius:99px;padding:6px 10px;font-size:11px;font-weight:700;}
+#farm-planner .farm-crop-chip:hover{background:#d7eada;}
+#farm-planner .farm-selection-error{background:#fff1e4;border:1px solid #edbc9c;color:#7d3c21;border-radius:9px;padding:10px 12px;font-size:12px;font-weight:700;}
+#farm-planner #crop-selection-section{scroll-margin-top:90px;}
+#farm-planner .farm-cover-note{color:#22583a;background:#eff8ee;border-radius:10px;font-size:11px;padding:9px 11px;margin:10px 0 0;}
+#farm-planner .farm-caution{color:#824e1e;background:#fff5e4;padding:10px;border-radius:9px;font-size:12px;}
+#farm-planner .seasons{grid-template-columns:repeat(auto-fit,minmax(100px,1fr));}
+#farm-planner .farm-best{background:#f7fcf5;}
+#farm-planner .farm-decision h3{overflow-wrap:anywhere;}
+
+/* Scientifically transparent rotation result additions */
+#farm-planner .farm-plan-eyebrow{font-size:10px;color:#467856;letter-spacing:.08em;text-transform:uppercase;font-weight:750;margin-bottom:8px;}
+#farm-planner .farm-plan-explanation{font-size:12px;line-height:1.55;color:#425c4a;margin-top:10px;}
+#farm-planner .farm-method-details{margin:20px 0 12px;padding:12px 16px;border:1px solid #ccd9cb;border-radius:12px;color:#294632;background:#f7fbf4;}
+#farm-planner .farm-method-details summary{font-size:13px;font-weight:750;cursor:pointer;}
+#farm-planner .farm-method-details p{font-size:12px;line-height:1.6;}
+#farm-planner .farm-selected-chips{scroll-margin-top:80px;}
+#farm-planner .farm-crop-option{min-height:47px;}
+#farm-planner .farm-decision p{line-height:1.55;}
+#farm-planner .farm-climate-summary{margin-bottom:12px;}

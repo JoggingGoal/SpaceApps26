@@ -1,0 +1,16 @@
+THE GREEN REVOLUTION / EXPLORE THE LAND v3
+
+IMPORTANT: This ZIP updates ONLY MAP/map.html, assets/js/map.js,
+assets/js/land-motion.js, assets/css/land-explorer.css and app.py.
+
+1. Drag the ZIP into the root of your SpaceApps26 Codespace.
+2. Stop `python3 app.py` with Ctrl+C.
+3. Run:
+
+   unzip -o The_Green_Revolution_Explore_Land_V3_Upgrade.zip
+   python3 app.py
+
+4. Open the forwarded port 8000 and press Ctrl+Shift+R.
+5. Test search (Paris, France), example cities, all climate chart tabs,
+   map zoom, and scrolling backward. If you see only country outlines,
+   the online map service is unavailable. The site still works for data.

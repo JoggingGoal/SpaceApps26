@@ -1,0 +1,176 @@
+/* FieldShift / The Green Revolution – Stitch visual system with accessible refinements. */
+:root { color-scheme: dark; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body { overflow-x: clip; }
+a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
+a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
+  outline: 3px solid #e4c27e !important;
+  outline-offset: 4px;
+}
+.skip-link { position: fixed; top: -130px; left: 20px; z-index: 9999; padding: 12px 20px;
+  color: #06100d; background: #b6e7c3; border-radius: 8px; font: 700 14px Manrope, sans-serif; }
+.skip-link:focus { top: 90px; }
+
+/* Navigation */
+.site-header { border-bottom: 1px solid rgba(182, 231, 195, .13); transition: background .3s ease; }
+.site-header.is-scrolled { background: rgba(7, 17, 14, .94); box-shadow: 0 9px 32px rgba(0,0,0,.28); }
+.site-brand { display: inline-flex; gap: 12px; align-items: center; min-width: 0; color: #f1f5ec; text-decoration: none; }
+.brand-leaf { display: grid; place-items: center; flex: none; color: #acd8b3; font-size: 27px; line-height: 1; }
+.brand-name { font: 400 22px/1 Newsreader, Georgia, serif; letter-spacing: -.025em; white-space: nowrap; }
+.brand-name small { display: block; margin-top: 7px; font: 500 9px/1.4 'JetBrains Mono', monospace; letter-spacing: .105em; color: #a7b9ab; }
+.desktop-nav { align-items: center; gap: clamp(14px, 1.75vw, 26px); }
+.desktop-nav a { color: #baccc0; font: 500 13px Manrope,sans-serif; text-decoration: none; padding: 11px 0; transition: color .2s; }
+.desktop-nav a:hover, .desktop-nav a:focus-visible, .desktop-nav a[aria-current="page"] { color: #f1f5ec; }
+.nav-action { flex: none; align-items: center; gap: 10px; padding: 11px 15px; border: 1px solid rgba(174,225,189,.3); border-radius: 99px;
+  color: #cbe8cf; font: 600 12px Manrope, sans-serif; text-decoration: none; transition: border-color .2s, background .2s; }
+.nav-action:hover { background: #193d2b; border-color: #a6d2b2; }
+.mobile-menu-toggle { padding: 10px; border: 1px solid #516659; border-radius: 9px; color: #f1f5ec; background: #12221b; cursor: pointer; }
+.mobile-menu-toggle span { display: block; width: 23px; height: 2px; margin: 4px 0; background: currentColor; border-radius: 10px; }
+.mobile-menu { position: absolute; top: 76px; left: 0; right: 0; padding: 12px 22px 24px;
+  background: #081711; border-bottom: 1px solid rgba(182,231,195,.2); box-shadow: 0 30px 48px rgba(0,0,0,.45); }
+.mobile-menu[hidden] { display: none !important; }
+.mobile-menu a { display: block; padding: 14px 9px; text-decoration: none; font: 500 15px Manrope, sans-serif; color: #e0e9e0; border-bottom: 1px solid rgba(182,231,195,.11); }
+.mobile-menu a:hover { color: #b6e7c3; }
+.scroll-progress { position: absolute; left: 0; bottom: -1px; width: 0%; height: 2px; background: linear-gradient(90deg,#9bcba8,#e4c27e); transition: width .08s linear; }
+
+/* Hero uses original Stitch background whenever WebGL is unavailable. */
+.revolution-main { padding-top: 0 !important; }
+.revolution-hero { min-height: 100svh !important; margin-top: 0 !important; padding-top: 108px !important; isolation: isolate; }
+.revolution-hero > [data-gsap="globe-layer"] { transform-origin: 50% 50%; }
+.revolution-hero [data-gsap="hero-text"] { z-index: 31 !important; }
+.revolution-hero [data-gsap="hero-text"] p { max-width: 690px; color: #d3e1d8; text-shadow: 0 2px 15px rgba(0,0,0,.55); }
+.revolution-hero [data-gsap="hero-text"] a { pointer-events: auto; }
+.revolution-hero [data-earth-container] { pointer-events: none; transform-origin: 50% 50%; }
+.earth-to-field { position: absolute; inset: 0; background-color: #0d2117; background-size: cover; background-position: center;
+  z-index: 26; opacity: 0; visibility: hidden; display: grid; place-items: center; text-align: center; padding: 24px; }
+.descent-shade { position: absolute; inset: 0; background: linear-gradient(to bottom,rgba(5,16,11,.67),rgba(5,16,11,.28) 45%,rgba(5,16,11,.87)); }
+.descent-copy { position: relative; max-width: 780px; color: #f4f5ec; }
+.descent-eyebrow, .manifesto-kicker, .indicator-detail-eyebrow { font: 600 11px/1.5 'JetBrains Mono', monospace; letter-spacing: .17em; color: #b9dabd; }
+.descent-copy h2 { margin: 20px 0; font: 400 clamp(46px,8vw,100px)/.98 Newsreader,Georgia,serif; letter-spacing: -.035em; }
+.descent-copy p { margin: 0 auto; font: 400 clamp(15px,2vw,21px)/1.55 Manrope,sans-serif; max-width: 600px; }
+#farmland { scroll-margin-top: 0; }
+#farmland .group, #farmland img { max-width: 100%; }
+
+/* Big mission statement without replacing the original Stitch indicator grid. */
+.revolution-manifesto { display: grid; grid-template-columns: auto 1fr; gap: clamp(16px,4vw,44px); align-items: start;
+  padding: clamp(24px,4vw,48px); margin: -24px 0 72px; border: 1px solid rgba(36,77,58,.2); border-radius: 20px;
+  background: #e5eddf; box-shadow: 0 12px 45px rgba(7,17,14,.045); }
+.manifesto-symbol { font: 400 clamp(46px,7vw,98px)/.9 Newsreader,Georgia,serif; color: #2b6745; }
+.manifesto-kicker { color: #39734b; }
+.revolution-manifesto p { margin: 10px 0 13px; color: #152d20; font: 400 clamp(24px,3vw,39px)/1.27 Newsreader,Georgia,serif; }
+.revolution-manifesto em { font-style: italic; color: #326a48; }
+.manifesto-footnote { display: block; color: #465a4d; font: 400 13px/1.6 Manrope,sans-serif; }
+[data-indicator] { cursor: pointer; transition: box-shadow .3s, border-color .3s, transform .3s; position: relative; }
+[data-indicator]:hover { transform: translateY(-5px); border-color: rgba(28,97,60,.34) !important; }
+[data-indicator].indicator-selected { border-color: #377e54 !important; box-shadow: 0 18px 34px rgba(21,75,38,.12) !important; }
+[data-indicator].indicator-selected::after { content: 'SELECTED'; position: absolute; top: 14px; right: 14px; font: 600 9px 'JetBrains Mono',monospace; letter-spacing: .05em; color: #28613c; }
+.indicator-detail { display: flex; align-items: center; justify-content: space-between; gap: 32px; margin: 24px 0 0; padding: 24px 30px;
+  border: 1px solid rgba(36,77,58,.18); border-radius: 16px; background: #e9f0e6; color: #10251c; }
+.indicator-detail-eyebrow { color: #4d7559; }
+.indicator-detail h3 { font: 400 28px/1.18 Newsreader,Georgia,serif; margin: 8px 0; }
+.indicator-detail p { margin: 0; color: #3e5748; font: 400 14px/1.6 Manrope,sans-serif; max-width: 710px; }
+.indicator-detail a { color: #164b2f; font: 700 12px Manrope,sans-serif; white-space: nowrap; text-underline-offset: 4px; }
+
+/* Cards: photographic storytelling, but easy to discover links. */
+#destinations [data-gsap="destination-card"] { isolation: isolate; overflow: hidden; transition: box-shadow .35s,border-color .35s; }
+#destinations [data-gsap="destination-card"]::before { content: ''; position: absolute; inset: 0; z-index: 2; opacity: .0;
+  background: radial-gradient(320px circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(168,235,184,.13),transparent 70%);
+  pointer-events: none; transition: opacity .4s; }
+#destinations [data-gsap="destination-card"]:hover::before { opacity: 1; }
+#destinations [data-gsap="destination-card"]:hover { box-shadow: 0 25px 60px rgba(0,0,0,.35); }
+#destinations [data-gsap="destination-card"] a { position: relative; z-index: 4; }
+#destinations a { text-underline-offset: 4px; }
+
+/* Footer replaces unverifiable telemetry and license claims from the Stitch draft. */
+.revolution-footer { background: #05110c; color: #bfcebf; border-top: 1px solid rgba(182,231,195,.16); padding: 64px max(24px,calc((100vw - 1200px)/2)) 24px; }
+.footer-inner { display: grid; grid-template-columns: minmax(0,2fr) minmax(130px,1fr) minmax(170px,1fr); gap: 46px; }
+.footer-brand { color: #f4f5ec; font: 400 28px Newsreader,Georgia,serif; text-decoration: none; }
+.footer-brand span { display: block; font: 600 12px Manrope,sans-serif; color: #a1c9ac; margin-top: 7px; }
+.footer-inner p { max-width: 560px; color: #aabbaf; font: 400 13px/1.75 Manrope,sans-serif; margin-top: 16px; }
+.footer-right { display: flex; align-items: start; flex-direction: column; gap: 12px; }
+.footer-right .footer-heading { font: 600 10px 'JetBrains Mono',monospace; letter-spacing: .15em; color: #9cc5a5; margin: 0 0 8px; }
+.footer-right a { color: #d6e6d9; font: 500 13px Manrope,sans-serif; text-decoration: none; }
+.footer-right a:hover { color: #a6e8b7; text-decoration: underline; }
+.footer-bottom { display: flex; justify-content: space-between; gap: 20px; margin-top: 50px; padding-top: 18px; border-top: 1px solid rgba(182,231,195,.12);
+  color: #81978b; font: 400 11px/1.5 'JetBrains Mono',monospace; }
+
+@media(max-width:1023px) {
+ .site-brand .brand-name { font-size: 21px; }
+ .revolution-hero { padding-top: 120px !important; }
+}
+@media(max-width:767px) {
+ .revolution-hero { min-height: 100svh !important; padding-top: 112px !important; }
+ .revolution-hero [data-earth-container] { opacity: .7; }
+ .revolution-hero [data-gsap="hero-text"] h1 { font-size: clamp(38px, 10vw, 60px); line-height: 1.08; }
+ .revolution-hero [data-gsap="hero-text"] p { font-size: 15px; line-height: 1.7; }
+ .revolution-hero [data-gsap="hero-text"] { margin-top: 60px; }
+ .revolution-manifesto { grid-template-columns: 1fr; margin: 0 0 44px; }
+ .revolution-manifesto .manifesto-symbol { line-height: .5; }
+ .indicator-detail { flex-direction: column; align-items: start; }
+ .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+ .footer-bottom { flex-direction: column; }
+ #farmland { padding-top: 84px; padding-bottom: 84px; }
+}
+@media(max-width:420px) {
+ .brand-name { font-size: 19px !important; }
+ .brand-name small { font-size: 8px; }
+ .revolution-hero [data-gsap="hero-text"] { margin-top: 110px; }
+ .revolution-hero [data-gsap="hero-text"] h1 { font-size: 36px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ html { scroll-behavior: auto; }
+ *,*::before,*::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+   transition-duration: .01ms !important; }
+ .earth-to-field { display: none !important; }
+ [data-indicator]:hover { transform: none; }
+}
+
+/* Clean-up: one cinematic hero, no fake instrument rings or telemetry. */
+.hero-globe-stage { pointer-events: none; }
+.site-brand { max-width: min(38vw, 360px); }
+.brand-name { white-space: normal; line-height: 1.08; }
+#space-hero [data-gsap="hero-text"] { margin-top: auto; margin-bottom: auto; }
+#space-hero [data-gsap="hero-text"] h1 { text-wrap: balance; text-shadow: 0 8px 35px rgba(0,0,0,.55); }
+#space-hero [data-gsap="hero-text"] p { text-wrap: pretty; }
+#destinations [data-gsap="destination-card"] h3 { text-wrap: balance; }
+@media (min-width:1024px) {
+  .desktop-nav { gap:clamp(14px,1.5vw,23px) }
+  .desktop-nav a { font-size:12px; }
+}
+@media (max-width:640px) {
+  .brand-name small { display:none; }
+  #space-hero [data-gsap="hero-text"] { margin-top:30px; }
+}
+
+/* Free Three.js Earth. No paid account or scene URL needed. */
+.three-earth-host { position:absolute; inset:0; z-index:5; pointer-events:none; }
+.three-earth-host canvas { width:100%; height:100%; display:block; }
+.three-earth-ready .revolution-hero > [data-gsap="globe-layer"] { opacity:0.07 !important; }
+.three-earth-ready .hero-globe-stage { pointer-events:none; }
+@media (max-width:767px) { .three-earth-host { opacity:.72; } }
+
+/* Zoom fix: native sticky scene works with or without GSAP loading. */
+.earth-scroll-journey { position: relative; height: 300svh; min-height: 1200px; isolation: isolate; }
+.earth-scroll-journey > #space-hero {
+  position: sticky !important; top: 0 !important; width: 100%; height: 100svh !important;
+  max-height: 100svh; min-height: 100svh !important; margin: 0 !important;
+  overflow: hidden;
+}
+#space-hero [data-gsap="hero-text"] {
+  opacity: var(--hero-copy-opacity, 1); transform: translate3d(0,var(--hero-copy-y,0px),0);
+  will-change: opacity,transform;
+}
+#space-hero [data-gsap="scroll-cue"] { opacity:var(--scroll-cue-opacity,1); }
+#space-hero > [data-gsap="globe-layer"] { transform:scale(var(--fallback-earth-scale,1.05)); }
+#space-hero .earth-to-field { opacity:var(--field-opacity,0); visibility:hidden; pointer-events:none; }
+#space-hero .earth-to-field.active-field { visibility:visible; }
+#space-hero .earth-to-field .descent-copy {
+ opacity:var(--field-copy-opacity,0); transform:translate3d(0,var(--field-copy-y,36px),0);
+}
+#space-hero [data-earth-container] { transform:none !important; }
+@media(max-width:767px){ .earth-scroll-journey {height:230svh;min-height:950px;} }
+@media(prefers-reduced-motion:reduce){
+ .earth-scroll-journey {height:auto;min-height:0;}
+ .earth-scroll-journey > #space-hero {position:relative !important;}
+ #space-hero [data-gsap="hero-text"] {opacity:1 !important;transform:none !important;}
+}

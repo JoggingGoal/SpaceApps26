@@ -1,0 +1,7 @@
+{
+  "name": "the-green-revolution-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Interactive soil-health and crop-rotation decision-support prototype"
+}

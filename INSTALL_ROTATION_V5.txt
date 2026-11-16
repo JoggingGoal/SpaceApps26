@@ -1,0 +1,47 @@
+THE GREEN REVOLUTION: FINAL CROP ROTATION ENGINE UPGRADE
+=========================================================
+
+This is a SIMULATOR-ONLY update. It does NOT replace your existing Python server,
+homepage, map, science hub, or NASA API endpoints.
+
+Changes:
+- Crops are required: select 2 to 8 different named cash crops.
+- Searchable multi-checkbox picker with persistent selections and removal chips.
+- Optional cover crops never take a cash-crop year.
+- Uses only selected cash crops in 2-, 3-, or 4-year rotation candidates.
+- Optional CURRENT crop/crop sequence is compared, never fabricated or repeated
+  as a novel suggestion. If it outranks all alternatives, the app says so.
+- Each selected crop is classified by botanical family where recognized.
+  Missing species profiles are explicitly flagged as lower confidence.
+- Pulls NASA POWER weather using your existing /api/climate endpoint and
+  lets you set April-Sep, October-Mar or full-year season definitions.
+- Ranks alternatives by historical-weather screening, soil texture, botanical
+  family diversity and ease of adoption. Shows actual chosen crop sequences,
+  per-component scores, historical-year score range, concrete advice and risks.
+- Keeps budgets separate; no unverifiable yield/profit predictions.
+
+INSTALL (from your GitHub Codespaces project root, usually SpaceApps26):
+1. Back up any changes: git status ; git add . ; git commit -m "Before crop rotation final fix"
+   (or copy changed files manually).
+2. Upload Green_Revolution_Rotation_Engine_Final_Upgrade.zip to your project root.
+3. Stop running python3 app.py with Ctrl+C.
+4. Run: unzip -o Green_Revolution_Rotation_Engine_Final_Upgrade.zip
+5. Run: python3 app.py
+6. Open port 8000 and refresh with Ctrl+Shift+R.
+7. Go to /SIMULATIONS/simulations.html.
+
+TEST:
+node --test tests/rotation-engine.test.mjs
+python3 -m unittest discover -s tests
+
+TRY:
+- Search Mason, Ohio (city suggestions should show), select it.
+- Select Maize + Soybean + Potato from crop search.
+- Enter your existing crop(s), e.g. Maize -> Soybean.
+- Choose priority Soil health. Analyze your farm.
+- Inspect actual names in all returned plans. No unselected cash crop should appear.
+- Switch priority to Water and try October-March; results should recalculate.
+- Remove selections until only one remains; the page must refuse to make a plan.
+
+This is an educational screening prototype, not an agronomic prescription.
+The algorithm and coefficients are explained in ROTATION_MODEL.md.
