@@ -1,0 +1,217 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f5ec"><title>Crop Rotation Simulator | The Green Revolution</title><link rel="stylesheet" href="../assets/css/styles.css"><link rel="stylesheet" href="../assets/css/farm-planner.css"><script defer type="module" src="../assets/js/farm-planner.js?v=5"></script></head><body><div id="site-header"></div><main class="farm-page"><div id="farm-planner" class="farm-app"><div class="shell">
+
+<section aria-labelledby="page-title" class="hero">
+<div>
+<p class="eyebrow">The Green Revolution / Crop Rotation Simulator</p>
+<h1>Build a healthier rotation for your farm.</h1>
+<p>Explore practical rotation ideas using your local climate history, soil conditions and farming goals. Only crops you explicitly choose appear in proposed rotations. Compare understandable sequences, reasons, limitations, and local checks before planting.</p>
+</div>
+<aside class="hero-note"><strong>Built for clear decisions</strong>Search for a city, select at least two crops you could plant, and compare strategies. Climate observations are real; crop-fit scores are prototype estimates.</aside>
+</section><div class="farm-trust"><span>Real regional weather</span><span>Transparent scoring</span><span>Soil-health practices</span><span>Costs shown only with your inputs</span></div>
+<div class="layout">
+<form class="panel form-panel" id="farm-form">
+<div class="section-heading">
+<div><h2>Your farm profile</h2><p>Approximate answers are useful; you can adjust them later.</p></div>
+<span aria-label="Step 1" class="step">01</span>
+</div>
+<section aria-labelledby="place-heading" class="subsection">
+<h3 class="subsection-title" id="place-heading">Place &amp; land</h3>
+<div class="fields">
+<div class="field wide">
+<label for="place">Where is your farm?</label>
+<input aria-autocomplete="list" aria-controls="farm-city-results" aria-expanded="false" autocomplete="off" id="place" placeholder="Start typing a city, e.g. Hyderabad, Mason, Paris…" role="combobox" type="text"/><div class="farm-city-results" hidden="" id="farm-city-results" role="listbox"></div><p class="hint" id="farm-city-help">Type at least 3 letters and select a city to fill in coordinates.</p>
+</div>
+<div class="field wide">
+<span class="label">Farm coordinates <span class="optional">(required)</span></span>
+<div class="coord-row">
+<input aria-label="Latitude" id="latitude" max="90" min="-90" placeholder="Latitude" required="" step="any" type="number"/>
+<input aria-label="Longitude" id="longitude" max="180" min="-180" placeholder="Longitude" required="" step="any" type="number"/>
+<button class="small-button" id="locate-button" type="button">Use my location</button>
+</div>
+<p class="hint" id="location-help">Coordinates are required. They are sent to NASA only when you request climate and vegetation data.</p>
+<div class="map-box" id="map-box">
+<div class="map-placeholder" id="map-placeholder">
+<span aria-hidden="true">⌖</span>
+<p>Choose a city to preview its location. Detailed maps are linked below.</p>
+</div>
+</div>
+<div class="map-actions">
+<p class="hint" id="map-privacy">Coordinates identify a regional climate grid; the map preview uses bundled geography.</p>
+
+<a class="map-link" hidden="" href="#" id="map-link" rel="noopener noreferrer" target="_blank">Open detailed street map ↗</a>
+</div>
+</div>
+<div class="field">
+<label for="area">Farm area</label>
+<div class="unit-input"><input id="area" min="0" step="any" type="number" value="10"/><span class="unit">hectares</span></div>
+</div>
+<div class="field">
+<label for="water">Water available</label>
+<select id="water">
+<option value="limited">Limited / unreliable</option>
+<option selected="" value="adequate">Adequate</option>
+<option value="abundant">Abundant / irrigated</option>
+<option value="unknown">Not sure</option>
+</select>
+</div>
+<div class="field wide">
+<label for="soil">Main soil texture <span class="optional">(optional)</span></label>
+<select id="soil">
+<option selected="" value="unknown">Not sure / prefer a general estimate</option>
+<option value="sandy">Sandy or coarse</option>
+<option value="loamy">Loam or silt loam</option>
+<option value="clay">Clay or fine-textured</option>
+<option value="peaty">Peaty / organic</option>
+</select>
+</div>
+<div class="field">
+<label for="ph">Soil pH <span class="optional">(advice only, not scored)</span></label>
+<div class="unit-input"><input id="ph" max="14" min="0" placeholder="e.g. 6.5" step="0.1" type="number"/><span class="unit">pH</span></div>
+</div>
+<div class="field">
+<label for="organic-matter">Organic matter <span class="optional">(advice only, not scored)</span></label>
+<div class="unit-input"><input id="organic-matter" max="100" min="0" placeholder="e.g. 3" step="0.1" type="number"/><span class="unit">%</span></div>
+</div>
+</div>
+</section>
+<section aria-labelledby="climate-heading" class="subsection">
+<h3 class="subsection-title" id="climate-heading">Climate &amp; field signals</h3>
+<div class="field wide"><label for="farm-season">Which months should count as your growing season?</label>
+<select id="farm-season"><option value="apr-sep">April – September</option><option value="oct-mar">October – March</option><option value="year-round">January – December (full year)</option></select>
+<p class="hint">Choose a season suitable for your location. This controls which NASA daily observations enter the score. The site cannot infer your crop's planting and harvest dates automatically.</p></div>
+<div class="field wide nasa-fetch">
+<p aria-live="polite" class="hint" id="nasa-status" role="status">NASA POWER daily weather for 2016–2025 is loaded when you build your comparison. Vegetation data is optional and may take longer.</p>
+<p class="hint">Source: <a href="https://power.larc.nasa.gov/docs/services/api/temporal/daily/" rel="noopener noreferrer" target="_blank">NASA POWER daily weather API ↗</a></p>
+<p aria-live="polite" class="hint" id="ndvi-status" role="status">Vegetation observations are optional; they are never required to generate rotation ideas.</p><button class="small-button farm-secondary-action" id="load-normal" type="button">Load 1991–2020 climate baseline ↗</button><p class="hint" id="normal-status">Optional historical normal uses your uploaded NASA POWER monthly backend.</p><button class="small-button farm-secondary-action" id="load-ndvi" type="button">Load optional satellite NDVI ↗</button>
+<p class="hint">Vegetation source: <a href="https://modis.ornl.gov/data/modis_webservice.html" rel="noopener noreferrer" target="_blank">NASA ORNL DAAC MODIS service ↗</a></p>
+</div>
+<div class="fields">
+<div class="field">
+<label for="rainfall">Selected-season rainfall <span class="optional">(NASA-derived context, not an extra score input)</span></label>
+<div class="unit-input"><input id="rainfall" max="10000" min="0" placeholder="Loads with NASA daily data" step="0.1" type="number" readonly aria-readonly="true"/><span class="unit">mm</span></div>
+</div>
+<div class="field">
+<label for="rain-trend">Selected-season rainfall trend <span class="optional">(context)</span></label>
+<select id="rain-trend" disabled>
+<option value="stable">Mostly stable</option>
+<option value="drier">Drier than the earlier years</option>
+<option value="wetter">Wetter than the earlier years</option>
+<option selected="" value="unknown">Not sure</option>
+</select>
+</div>
+<div class="field">
+<label for="heat-risk">Historical heat exposure <span class="optional">(context)</span></label>
+<select id="heat-risk" disabled>
+<option value="low">Rare</option>
+<option selected="" value="medium">Some years</option>
+<option value="high">Frequent</option>
+<option value="unknown">Not sure</option>
+</select>
+</div>
+<div class="field">
+<label for="frost-days">Frost-free growing days <span class="optional">(optional advisory, not scored)</span></label>
+<div class="unit-input"><input id="frost-days" max="365" min="0" placeholder="e.g. 150" step="1" type="number"/><span class="unit">days</span></div>
+</div>
+</div>
+</section>
+<section aria-labelledby="crops-heading" class="subsection" id="crop-selection-section">
+<h3 class="subsection-title" id="crops-heading">Choose the crops you want to grow <span class="farm-required-tag">Required</span></h3>
+<p class="farm-select-intro">Pick <strong>2–8 named cash crops</strong> that you are willing and able to plant. You can also select cover crops. The simulator will build rotations <strong>only from your chosen cash crops</strong>, instead of inventing other crops.</p>
+<div class="field wide farm-choice-field">
+<label for="crop-search">Find crops to include</label>
+<input id="crop-search" type="search" placeholder="Search 342 crop types, e.g. buckwheat, chickpea, maize…" autocomplete="off" aria-controls="available-crops" aria-describedby="crop-help" />
+<p class="hint" id="crop-help">Check the boxes to select multiple crops. Search again to add more; your selections stay saved. Cover crops are optional and never treated as full-year cash crops.</p>
+<div id="selected-crop-chips" class="farm-selected-chips" aria-live="polite"></div>
+<div id="available-crops" class="farm-crop-options" role="group" aria-label="Available crops to select"></div>
+<p id="selected-crop-count" class="hint" aria-live="polite">No crops selected.</p>
+<p id="crop-selection-error" class="farm-selection-error" role="alert" hidden>Choose 2–8 named cash crops to create a rotation.</p>
+</div>
+<div class="fields current-crop-fields">
+<div class="field">
+<label for="existing-crop-1">Current crop (optional comparison)</label>
+<select id="existing-crop-1"><option value="">Not specified</option></select>
+<p class="hint">Only your selected crops appear here.</p>
+</div>
+<div class="field">
+<label for="existing-crop-2">Next crop in your current rotation (optional)</label>
+<select id="existing-crop-2"><option value="">Same as first / unknown</option></select>
+<p class="hint">We only create a baseline if you provide a current crop.</p>
+</div>
+<div class="field wide">
+<label for="farm-priority">Biggest priority</label><select id="farm-priority">
+<option value="balanced">Balanced soil health and practicality</option>
+<option value="soil">Soil cover and biological diversity</option>
+<option value="water">Water resilience</option>
+<option value="adoption">Ease of implementation</option>
+</select>
+</div>
+</div>
+</section>
+<section aria-labelledby="practices-heading" class="subsection">
+<h3 class="subsection-title" id="practices-heading">Farm practices</h3>
+<fieldset>
+<legend class="label">Practices already in place <span class="optional">(advice only)</span></legend>
+<div class="check-grid">
+<label class="check"><input name="practice" type="checkbox" value="cover"/> Keep soil covered between crops</label>
+<label class="check"><input name="practice" type="checkbox" value="reduced-till"/> Reduced / no tillage</label>
+<label class="check"><input name="practice" type="checkbox" value="diverse"/> Mixed crops or field margins</label>
+<label class="check"><input name="practice" type="checkbox" value="organic-inputs"/> Compost or manure inputs</label>
+</div>
+</fieldset>
+<details class="field-details"><summary>Optional: estimate economic trade-offs</summary>
+<p class="tuning-intro">Enter your own estimated changes. These are not NASA measurements or predicted profits.</p>
+<div class="fields"><div class="field"><label for="income-change">Expected extra revenue per hectare</label><div class="unit-input"><input id="income-change" placeholder="e.g. 120" step="any" type="number"/><span class="unit">$/ha</span></div></div>
+<div class="field"><label for="additional-cost">Additional costs per hectare</label><div class="unit-input"><input id="additional-cost" placeholder="e.g. 75" step="any" type="number"/><span class="unit">$/ha</span></div></div></div>
+<p class="hint">Optional budget scenario only. Results are shown separately from agronomic scores.</p>
+</details></section>
+<details class="field-details">
+<summary>Advanced: terrain &amp; field details</summary>
+<p class="tuning-intro">These optional observations trigger erosion and drainage cautions. NASA POWER does not measure slope; enter a field estimate if you have one.</p>
+<div class="fields">
+<div class="field">
+<label for="slope">Average field slope <span class="optional">(advice only)</span></label>
+<div class="unit-input"><input id="slope" max="100" min="0" placeholder="e.g. 4" step="any" type="number"/><span class="unit">%</span></div>
+</div>
+<div class="field">
+<label for="erosion-risk">Visible erosion</label>
+<select id="erosion-risk">
+<option selected="" value="unknown">Not sure</option>
+<option value="low">Little or none</option>
+<option value="medium">Some signs</option>
+<option value="high">Frequent / severe</option>
+</select>
+</div>
+<div class="field wide">
+<label for="drainage">Field drainage</label>
+<select id="drainage">
+<option selected="" value="unknown">Not sure</option>
+<option value="poor">Often wet / slow to drain</option>
+<option value="moderate">Usually adequate</option>
+<option value="fast">Drains quickly / can dry out</option>
+</select>
+</div>
+</div>
+<p class="hint" id="grid-elevation">NASA grid elevation is not loaded.</p>
+</details>
+<div class="actions">
+<button class="button secondary" type="reset">Reset</button>
+<button class="button" id="build-button" type="submit">Build ideas with NASA data</button>
+</div>
+</form>
+<section aria-labelledby="results-heading" aria-live="polite" class="panel results-panel">
+<h2 class="results-title" id="results-heading">Your rotation recommendations</h2>
+<p class="results-subtitle">The comparison uses only your chosen cash crops. Scores rank your stated preferences under historical weather, not yield, profits or an agronomic optimum.</p>
+<p class="result-status" id="result-status">Choose a city or enter coordinates, describe your farm, then analyze your options.</p><section aria-live="polite" class="farm-climate-summary" id="farm-climate-summary"><p class="hint">Historical climate measurements will appear after you select a location and analyze your farm.</p></section>
+<section aria-live="polite" class="farm-decision" hidden="" id="farm-decision"></section>
+<section class="farm-actions" hidden="" id="farm-actions"><h3>Your next steps</h3><div id="farm-action-list"></div></section>
+<section class="farm-weather-chart" hidden="" id="farm-weather-chart"><h3>Rainfall history behind this comparison</h3><div class="farm-annual-bars" id="farm-annual-bars"></div><p class="hint">April–September NASA POWER rainfall for the selected location; regional model/grid observations, not individual farm gauges.</p></section>
+
+<div class="plan-list" id="plan-list">
+<div class="empty-state">First choose at least two crops in the required crop picker, then analyze your farm.</div>
+</div>
+<p class="hint" id="area-note">Farm size is used for context, not the score.</p>
+<details class="farm-method-details"><summary>How are the scores calculated?</summary><p>For each crop, a documented screening profile estimates relative sensitivity to rainfall shortfalls and hot-day anomalies. A crop-family diversity calculation uses Simpson's index and transitions between botanical families. Soil texture and adoption complexity are estimated separately. The final index is a weighted combination averaged across historical weather seasons with extra weight on challenging seasons.</p><p><strong>Important:</strong> It does not validate crop phenology, seed variety, irrigation water balance, pests, planting windows, yields, or profits. Unknown species are evaluated with broad family assumptions and explicitly flagged. NASA POWER is regional weather, not a field measurement.</p></details><p class="notice">Educational screening tool, not a validated crop-suitability, planting, yield, or profit forecast. Confirm the crop variety, calendar, local markets, equipment, water supply, pests, and soil tests with an agronomist. NASA POWER data is gridded regional weather; MODIS vegetation is not a farm-boundary measurement.</p>
+
+</section>
+</div>
+</div></div></main><div id="site-footer"></div></body></html>

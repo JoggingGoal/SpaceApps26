@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1913">
+  <meta name="description" content="Explore ten years of location-specific rainfall and heat data alongside soil information.">
+  <title>Explore the Land | The Green Revolution</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="../assets/css/land-explorer.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script defer src="../assets/js/land-motion.js"></script>
+  <script defer src="../assets/js/city-autocomplete.js"></script>
+  <script type="module" src="../assets/js/common.js"></script>
+  <script defer src="../assets/js/map.js?v=4"></script>
+</head>
+<body class="land-explorer">
+<div id="land-scroll-progress" aria-hidden="true"></div>
+<div id="site-header"></div>
+<main>
+  <section class="land-hero" id="land-intro">
+    <div class="land-hero-grid" aria-hidden="true"></div>
+    <div class="land-hero-orbit" aria-hidden="true"></div>
+    <div class="container land-hero-body">
+      <div class="land-kicker"><span class="land-kicker-dot"></span> THE GREEN REVOLUTION / EXPLORE 01</div>
+      <h1>Look closer at <em>our land.</em><br><span>Understand what it needs.</span></h1>
+      <p>Explore a location's rainfall, growing-season heat, and dry spells. Learn what these patterns mean for farming and why protecting soil matters.</p>
+      <div class="hero-pill-row"><span>Historical weather</span><span>Search any city</span><span>Understanding soil</span></div>
+    </div>
+    <div class="hero-edge"><span>01 / SEE THE PATTERNS</span><a href="#location-section">SCROLL TO EXPLORE ↓</a></div>
+  </section>
+
+  <div class="land-body">
+    <section class="container land-map-section" id="location-section" aria-labelledby="choose-area-title">
+      <div class="land-section-top" data-reveal><div><p class="land-section-label">01 / FIND YOUR LOCATION</p><h2 id="choose-area-title">Where should we <em>look?</em></h2><p>Search a city anywhere in the world, choose an example, or click a point on the map. Then explore its historical climate.</p></div><span class="land-map-step">LOCATION → DATA → MEANING</span></div>
+      <form class="land-search" id="city-form" autocomplete="off" role="search">
+        <label for="city-query">Find a city or town</label>
+        <div class="land-search-bar"><input id="city-query" name="city" type="search" minlength="3" maxlength="100" placeholder="Start typing a city, e.g. London" aria-describedby="city-help" aria-controls="city-results" aria-expanded="false" aria-autocomplete="list" role="combobox" autocomplete="off"><button type="submit" id="city-search-button">Select city ↗</button></div>
+        <p id="city-help" class="land-search-help">Start typing at least 3 letters. Choose a matching city, region, and country from the dropdown.</p>
+        <div id="city-results" class="land-search-results" role="listbox" aria-label="Matching cities" hidden></div>
+      </form>
+      <div class="land-locations" role="group" aria-label="Example agricultural regions">
+        <button type="button" class="land-location" data-place="ames">Ames, Iowa</button>
+        <button type="button" class="land-location" data-place="mason">Mason, Ohio</button>
+        <button type="button" class="land-location" data-place="davis">Davis, California</button>
+        <button type="button" class="land-location" data-place="lubbock">Lubbock, Texas</button>
+      </div>
+      <div class="land-main-grid">
+        <div class="land-map-card">
+          <div class="land-map-toolbar"><div class="map-toolbar-title"><span class="live-dot"></span> WORLD GEOGRAPHIC EXPLORER</div><span class="land-map-tag">World map • city search</span></div>
+          <div id="earth-map" class="land-map-canvas" role="region" aria-label="Interactive world map. Pan or zoom, or select a city using search.">
+            <img id="world-map-placeholder" src="../assets/maps/world-overview.svg" alt="World map showing country outlines" loading="eager">
+          </div>
+          <div class="land-map-controls" role="group" aria-label="Map zoom controls"><button id="map-zoom-in" type="button" aria-label="Zoom in">+</button><button id="map-zoom-out" type="button" aria-label="Zoom out">−</button></div>
+          <button id="reset-world" type="button" class="land-world-reset">◉ View world</button>
+          <div class="land-map-bottom"><span id="layer-description">Search a city or click any spot to select coordinates. Drag and zoom to explore.</span><span class="land-map-date">NATURAL EARTH / COUNTRY BOUNDARIES</span></div>
+          <div class="land-map-feedback" id="layer-feedback" role="status">World map ready. Search for a city or click to select coordinates.</div>
+          <div class="land-map-detail"><span>Country boundaries work offline. For city streets and neighborhoods:</span><a id="detailed-map-link" href="https://www.openstreetmap.org" target="_blank" rel="noopener noreferrer">Open detailed map ↗</a></div>
+        </div>
+        <aside class="land-side-panel">
+          <p class="land-section-label">SELECTED LOCATION</p><h3 id="place-name">Ames, Iowa</h3><p class="land-coords" id="place-coordinates">42.0300° N, 93.6200° W</p>
+          <div class="land-divider"></div><div class="land-small-label">2025 GROWING-SEASON SNAPSHOT <span class="land-snapshot-sub">April–September</span></div>
+          <div class="land-stat-grid">
+            <div class="land-stat"><span>Rainfall</span><strong id="map-rain">—</strong><small>mm · Apr–Sep</small></div>
+            <div class="land-stat"><span>Very hot days</span><strong id="map-heat">—</strong><small>days ≥ 32°C · Apr–Sep</small></div>
+            <div class="land-stat"><span>Longest dry spell</span><strong id="map-dry">—</strong><small>consecutive days below 1 mm</small></div>
+            <div class="land-stat"><span>10-year avg. rainfall</span><strong id="map-year">—</strong><small>mm · 2016–2025</small></div>
+          </div>
+          <button id="load-climate" type="button" class="land-primary-button">Analyze this location ↗</button>
+          <p class="land-server-status" id="map-status" role="status" aria-live="polite">Select a location to load historical data.</p>
+          <div class="land-divider"></div><p class="land-provenance"><span>●</span> Weather values describe regional grids, not individual soil sensors or farm plots.</p>
+        </aside>
+      </div>
+      <div class="land-howto" aria-labelledby="howto-title" data-reveal>
+        <div class="land-howto-title"><p class="land-section-label">HOW TO INTERPRET THE LOCATION</p><h3 id="howto-title">What do these numbers <em>actually mean?</em></h3><p>There is no one perfect value for every farm. The best amount of rain or heat depends on the crops, soil, and growing stage. Use these measurements as context, not a universal pass-or-fail score.</p></div>
+        <div class="land-explain-grid">
+          <article class="land-explain"><span class="land-explain-icon">☂</span><h4>Seasonal rainfall</h4><p>Total water arriving between April and September, in millimeters. Compare it against this location's historical average and look for unusually dry years.</p><div id="rain-explain" class="land-explain-dynamic">Load a location to compare with the 10-year average.</div></article>
+          <article class="land-explain"><span class="land-explain-icon">☀</span><h4>Very hot days</h4><p>Days when the air temperature reaches at least 32°C (89.6°F). Fewer extreme-heat days generally mean less heat exposure, though crops tolerate heat differently.</p><div id="heat-explain" class="land-explain-dynamic">We will compare this season with recent years.</div></article>
+          <article class="land-explain"><span class="land-explain-icon">◷</span><h4>Longest dry spell</h4><p>Longest consecutive stretch of days with under 1 mm of rain. Shorter spells usually mean fewer prolonged rainless periods, but soil water storage also matters.</p><div id="dry-explain" class="land-explain-dynamic">We will compare the dry spell with the historical range.</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="container land-dashboard" id="observations" aria-labelledby="observations-title">
+      <div class="land-section-top" data-reveal><div><p class="land-section-label">02 / WHAT THE DATA SHOWS</p><h2 id="observations-title">Read the <em>signals.</em></h2><p>Explore location-specific historical patterns. Switch a chart to see how the same place changes through time.</p></div><button id="export-climate" type="button" class="land-export" disabled>Download climate CSV ↓</button></div>
+      <div class="land-indicator-grid" role="group" aria-label="Choose a climate chart">
+        <button class="land-indicator is-active" type="button" data-metric="rainfall" aria-pressed="true"><span class="indicator-number">01</span><strong>Rainfall</strong><span>Water through the seasons</span><i>↗</i></button>
+        <button class="land-indicator" type="button" data-metric="hotDays" aria-pressed="false"><span class="indicator-number">02</span><strong>Heat exposure</strong><span>Days ≥ 32°C</span><i>↗</i></button>
+        <button class="land-indicator" type="button" data-metric="drySpell" aria-pressed="false"><span class="indicator-number">03</span><strong>Dry spells</strong><span>Longest rainless stretch</span><i>↗</i></button>
+        <button class="land-indicator" type="button" data-metric="gdd" aria-pressed="false"><span class="indicator-number">04</span><strong>Growing degree days</strong><span>Accumulated warmth</span><i>↗</i></button>
+      </div>
+      <div class="land-analysis-card">
+        <div class="land-analysis-top"><div><p class="land-section-label" id="analysis-source-label">NASA POWER / HISTORICAL WEATHER</p><h3 id="analysis-title">Growing-season rainfall by year</h3><p id="analysis-subtitle">April–September seasonal totals, 2016–2025.</p></div><span id="analysis-tag" class="land-data-tag">2016–2025</span></div>
+        <div class="land-analysis-control" id="metric-controls"><button class="land-metric is-active" type="button" data-metric="rainfall">Annual totals</button><button class="land-metric" type="button" data-metric="monthly">Monthly averages</button><button class="land-metric" type="button" data-metric="hotDays">Hot days</button><button class="land-metric" type="button" data-metric="drySpell">Dry spells</button><button class="land-metric" type="button" data-metric="gdd">Growing degree days</button></div>
+        <div class="land-chart-frame"><canvas id="analysis-chart" hidden role="img" aria-label="Historical environmental chart"></canvas><div id="chart-fallback" class="land-chart-svg" hidden></div><div id="analysis-empty" class="land-chart-empty">Choose a location and select “Analyze this location” to view historical data.</div></div>
+        <div class="land-chart-foot"><p id="analysis-interpretation">NASA POWER values are regional estimates rather than readings from a specific field.</p><a href="https://power.larc.nasa.gov/docs/services/api/temporal/daily/" target="_blank" rel="noopener noreferrer">View NASA POWER data source ↗</a></div>
+      </div>
+      <div class="land-detail-grid">
+        <div class="land-article-card"><p class="land-section-label">WHAT THE CHART MEANS</p><h3 id="insight-title">Start with the local history.</h3><p id="insight-text">Compare one year to the average for the same location. Changes between years reveal variability, not necessarily a long-term trend.</p><div id="insight-equation" class="land-equation">Seasonal rainfall = sum of daily precipitation</div></div>
+        <div class="land-article-card land-article-dark"><p class="land-section-label">IMPORTANT CONTEXT</p><h3>Different crops, different needs.</h3><p id="insight-limits">Rainfall and heat do not determine field-level soil fertility, irrigation needs, or crop yields on their own. Check local soil information and agricultural expertise.</p><span class="land-article-foot">WEATHER DATA ≠ FIELD SOIL TEST</span></div>
+      </div>
+    </section>
+
+    <section class="container land-soil-section" aria-labelledby="soil-title">
+      <div class="land-section-top" data-reveal><div><p class="land-section-label">03 / BELOW THE SURFACE</p><h2 id="soil-title">What kind of soil <em>holds the roots?</em></h2><p>Climate observations are regional, but the texture and structure of a real field need a local soil survey or measurements.</p></div></div>
+      <div class="land-soil-grid">
+        <div class="land-soil-editor"><p class="land-section-label">SOIL CHARACTERISTICS</p><label for="soil-texture">Choose a soil texture (if known)</label><select id="soil-texture"><option value="unknown">Not known / not tested</option><option value="sandy">Sandy soil</option><option value="loam">Loam soil</option><option value="clay">Clay-rich soil</option><option value="silt">Silt-rich soil</option></select><div class="soil-slices" aria-hidden="true"><div class="soil-vegetation"></div><div class="soil-horizon soil-horizon-1"></div><div class="soil-horizon soil-horizon-2"></div><div class="soil-horizon soil-horizon-3"></div></div><h3 id="soil-character">Soil type not yet known</h3><p id="soil-explanation">A local survey is needed to identify the actual texture.</p><a href="https://websoilsurvey.nrcs.usda.gov/app/" target="_blank" rel="noopener noreferrer" class="land-text-link">Open USDA Web Soil Survey ↗</a></div>
+        <div class="land-soil-info"><p class="land-section-label">WHAT SATELLITES CAN AND CAN'T TELL US</p><div class="soil-info-row"><span>01</span><div><h4>Rainfall and temperature</h4><p>Regional historical conditions from NASA POWER. They help us understand weather exposure and seasonal variability.</p></div></div><div class="soil-info-row"><span>02</span><div><h4>Vegetation greenness (NDVI)</h4><p>Satellite indices show vegetation greenness, but not whether a field has fertile soil. A reliable field-scale map requires quality-controlled observations and a matching field boundary.</p></div></div><div class="soil-info-row"><span>03</span><div><h4>Soil moisture and texture</h4><p>Regional moisture products are much coarser than an individual farm. Soil texture, infiltration, and nutrient status require local sources or tests.</p></div></div><a class="land-primary-button land-inline-button" href="../SIMULATIONS/simulations.html">Explore crop rotations ↗</a></div>
+      </div>
+    </section>
+    <section class="land-closing"><div class="container" data-reveal><p class="land-section-label">NEXT / FROM INSIGHT TO ACTION</p><h2>Understand the land.<br><em>Then help it thrive.</em></h2><div class="land-closing-actions"><a href="../SCIENTIFIC_INFO/science.html" class="land-ghost-button">The Science Behind the Revolution ↗</a><a href="../SIMULATIONS/simulations.html" class="land-primary-button">Crop Rotation Simulator ↗</a></div></div></section>
+  </div>
+</main>
+<div id="site-footer"></div>
+</body>
+</html>
