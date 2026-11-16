@@ -198,3 +198,14 @@
 #farm-planner .farm-crop-option{min-height:47px;}
 #farm-planner .farm-decision p{line-height:1.55;}
 #farm-planner .farm-climate-summary{margin-bottom:12px;}
+
+/* Final comparison clarity and optional crop-expansion panel. */
+.farm-expand-choices {margin:18px 0;padding:18px;border:1px solid #dce5d8;border-radius:16px;background:#f6f8f1}
+.farm-expand-choices h3 {margin:0 0 8px;color:#193d2b;font-size:1.2rem}
+.farm-expansion-list {display:grid;gap:10px;margin-top:14px}
+.farm-expand-card {display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px;background:white;border:1px solid #e4eadf;border-radius:12px}
+.farm-expand-card strong {display:block;color:#1d4d32}.farm-expand-card p {margin:5px 0 0}
+.farm-expand-card .small-button {min-height:38px;flex-shrink:0}
+.farm-baseline {border:2px solid #85a88e!important;background:#f7faf6!important}
+.farm-score-difference {font-size:.82rem;color:#45684f;font-weight:700;margin:10px 0}
+@media(max-width:560px){.farm-expand-card{flex-direction:column;align-items:stretch}.farm-expand-card .small-button{width:100%}}

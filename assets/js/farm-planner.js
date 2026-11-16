@@ -1,5 +1,5 @@
 import { getSelectedPlace, setSelectedPlace } from "./common.js";
-import { climateSeasons, recommend, cropProfile, MAX_CASH_CROPS } from "./rotation-engine.mjs";
+import { climateSeasons, recommend, cropProfile, exploreCrops, MAX_CASH_CROPS } from "./rotation-engine.mjs";
 
     "use strict";
 
@@ -114,6 +114,7 @@ import { climateSeasons, recommend, cropProfile, MAX_CASH_CROPS } from "./rotati
         hasGenerated = false;
         document.getElementById("farm-decision").hidden = true;
         document.getElementById("farm-actions").hidden = true;
+        document.getElementById("farm-expand-choices").hidden = true;
         planList.replaceChildren(makeElement("div", "empty-state", "Select 2–8 named cash crops first. The simulator will not invent crops you did not select."));
         resultStatus.textContent = "Please select 2–8 cash crops you can actually grow.";
       }
@@ -158,9 +159,9 @@ import { climateSeasons, recommend, cropProfile, MAX_CASH_CROPS } from "./rotati
       const el=document.createElement(tag);if(className)el.className=className;
       if(text!==undefined)el.textContent=text;return el;
     }
-    function renderPlan(rotation, index, isBaseline=false) {
-      const article=makeElement("article","plan"+(index===0&&!isBaseline?" farm-best":""));
-      article.append(makeElement("div","farm-plan-eyebrow",isBaseline?"Your reported starting point":rotation.kind));
+    function renderPlan(rotation, index, isBaseline=false, baseline=null, margin=4) {
+      const article=makeElement("article","plan"+(isBaseline?" farm-baseline":""));
+      article.append(makeElement("div","farm-plan-eyebrow",isBaseline?"Your current rotation · comparison baseline":rotation.kind));
       const top=makeElement("div","plan-top");
       const heading=makeElement("div","");
       heading.append(makeElement("h3","",rotation.crops.map(c=>c.name).join(" → ")),
@@ -169,6 +170,13 @@ import { climateSeasons, recommend, cropProfile, MAX_CASH_CROPS } from "./rotati
       const seasons=makeElement("div","seasons");
       rotation.crops.forEach((c,i)=>{const step=makeElement("div","season");step.append(makeElement("span","",`Year ${i+1}`),makeElement("strong","",c.name));seasons.append(step);});
       article.append(seasons);
+      if(!isBaseline&&baseline){
+        const diff=rotation.score-baseline.score;
+        const note=Math.abs(diff)<=margin
+          ? `Close to your current rotation (within ${margin} screening points). This is not a proven improvement.`
+          : `${diff>0?"+":""}${diff} screening points versus your current rotation. This is a model preference difference, not a predicted yield change.`;
+        article.append(makeElement("p","farm-score-difference",note));
+      }
       const insight=makeElement("p","plan-reason",`Botanical families: ${rotation.profiles.map(c=>c.family).join(" → ")}. Family transitions: ${Math.round(rotation.diversity.breakRate*100)}% (including the cycle back to year 1).`);
       article.append(insight);
       const explanation=makeElement("p","farm-plan-explanation",`Historical-weather fit ${rotation.weather}/100 · Soil-texture screening ${rotation.soil}/100 · Family diversity ${rotation.stewardship}/100 · Practicality ${rotation.adoption}/100.`);
@@ -193,34 +201,42 @@ import { climateSeasons, recommend, cropProfile, MAX_CASH_CROPS } from "./rotati
     }
     function renderDecision(result,farm) {
       const alternative=result.alternatives[0] || null,base=result.baseline;
-      const keepExisting=Boolean(base && (!alternative || base.score >= alternative.score));
-      const winner=keepExisting?base:alternative;
       const box=document.getElementById("farm-decision");
       const actions=document.getElementById("farm-actions");
       box.hidden=false;actions.hidden=false;box.replaceChildren();
+      const delta = base&&alternative ? alternative.score-base.score : null;
+      const close = delta!==null && Math.abs(delta)<=result.margin;
+      const keepExisting=Boolean(base&&(!alternative||alternative.score<=base.score+result.margin));
+      const winner=keepExisting?base:alternative;
       if(!winner) {
         box.append(asNode("p","Only one allowed rotation is available; select more cash crops to compare alternatives. No additional crops will be invented."));
         return;
       }
       const sequence=winner.crops.map(c=>c.name).join(" → ");
-      const conclusion=keepExisting?"Your current cropping sequence remains the strongest screening fit":
-          "Highest-ranked alternative among crops you selected";
+      const conclusion=base
+          ? (!alternative ? "Only your current crop cycle is available from these choices"
+             : close ? "No clear scoring advantage over your current rotation"
+             : keepExisting ? "Your current sequence scores higher in this screening"
+             : "An alternative scores higher under your selected assumptions")
+          : "Leading screening option among the crops you selected";
       box.append(asNode("p",conclusion,"eyebrow"),
         asNode("h3",sequence),
         asNode("p",`Screening preference score: ${winner.score}/100 across ${result.seasonsUsed} NASA historical growing seasons. This is NOT a yield, profit, or proven-optimum prediction.`));
       if(keepExisting){
         box.append(asNode("p",alternative
-          ? `None of the tested alternatives outscored the current sequence under your chosen criteria. The highest alternative scored ${alternative.score}/100. Keep the existing rotation as your starting point and evaluate targeted soil-cover or management improvements.`
-          : "With only the two crops you selected, the current rotation already uses the only distinct two-crop cycle. Select an additional crop to compare a different crop sequence; otherwise focus on management changes."));
+          ? (close ? `Your current sequence and the leading alternative are only ${Math.abs(delta)} screening points apart. Treat that difference as inconclusive and compare costs, disease history and planting calendars before changing crops.`
+                   : `The highest tested alternative scored ${alternative.score}/100 compared with ${base.score}/100 for your current sequence. Changing crops does not appear to improve this screening index under these assumptions.`)
+          : "The available choices do not produce a distinct alternative to your existing cycle. Add another crop from your own list or investigate the optional research ideas below."));
       }
       if(base && !keepExisting) {
         const delta=winner.score-base.score;
-        box.append(asNode("p",`Your entered starting rotation scored ${base.score}/100; this candidate is ${delta} points higher under the selected priorities. Scores compare model assumptions, not observed field performance.`));
+        box.append(asNode("p",`Your entered starting rotation scored ${base.score}/100, compared with ${winner.score}/100 for this candidate (+${delta} screening points). This does not demonstrate higher yields or profit.`));
       }else if(!base){
         box.append(asNode("p","For a stronger comparison, fill in the current crops you actually plant. We will not invent a baseline."));
       }
       box.append(asNode("p",`Why it ranks here: this ${winner.crops.length}-crop sequence contains ${winner.diversity.familyCount} botanical families. Family-break score ${Math.round(winner.diversity.breakRate*100)}%; regional weather-fit screening ${winner.weather}/100; soil-texture screening ${winner.soil}/100. The current priority weights give these criteria different importance.`));
       const weights=winner.weights;
+      if(winner.legumeBeforeGrass) box.append(asNode("p",`The sequence places a legume before a grass in ${winner.legumeBeforeGrass} transition(s). This is a modest qualitative nutrient-cycling consideration, not a fertilizer-saving calculation.`));
       box.append(asNode("p",`Weights: regional weather ${Math.round(weights.weather*100)}%, soil texture ${Math.round(weights.soil*100)}%, family diversity/soil stewardship ${Math.round(weights.diversity*100)}%, adoption simplicity ${Math.round(weights.adoption*100)}%. Final score = 80% average across observed seasons + 20% average of the lowest-scoring quarter of seasons.`));
       if(winner.profileCount>winner.knownProfiles)
         box.append(asNode("p",`${winner.profileCount-winner.knownProfiles} crop(s) use broad-category rather than named-crop climate assumptions. That makes the ranking less certain.`,"farm-caution"));
@@ -254,7 +270,40 @@ import { climateSeasons, recommend, cropProfile, MAX_CASH_CROPS } from "./rotati
         const net=farm.incomeChange-farm.additionalCost;
         addAction("Budget scenario using your numbers",`${net>=0?"+":""}${net.toFixed(2)} per hectare (your estimated added revenue minus added costs). This is not a forecast and does not enter the agronomic ranking.`);
       } else addAction("Estimate the business trade-off","Compare local seed, irrigation, labor, machinery and market revenue for each specific crop. Regional weather records alone cannot predict profit.");
-      if(result.alternatives.length<4) addAction("Limited crop combinations",`Only ${result.alternatives.length} distinct crop sets were available from your selection. Add another named cash crop if you want a wider comparison.`);
+      if(result.alternatives.length<4) addAction("Limited crop combinations",`Only ${result.alternatives.length} distinct crop sets were available from your selection. The optional crop-expansion ideas below require your explicit approval before they can enter a rotation.`);
+    }
+
+
+    function renderCropExpansion(result, farm) {
+      const target=document.getElementById('farm-expand-choices');
+      const list=document.getElementById('farm-expansion-list');
+      if(!target||!list)return;
+      target.hidden=false;
+      list.replaceChildren();
+      if(cashCrops().length>=MAX_CASH_CROPS){
+        list.append(asNode('p','You already selected the maximum eight cash crops. Remove one to investigate other choices.','hint'));
+        return;
+      }
+      const ideas=exploreCrops({catalog:cropTypes,selectedCrops:result.availableCash,seasons:farmSeasons,farm});
+      for(const idea of ideas){
+        const card=asNode('div','','farm-expand-card');
+        const copy=asNode('div','','farm-expand-copy');
+        copy.append(asNode('strong',idea.crop.name),asNode('p',idea.reason+' This crop has NOT been added or scored.','hint'));
+        const add=document.createElement('button'); add.type='button';add.className='small-button';add.textContent='Add to my crop list';
+        add.addEventListener('click',()=>{
+          if(cashCrops().length>=MAX_CASH_CROPS){
+            document.getElementById('selected-crop-count').textContent='Remove a cash crop before adding another.';return;
+          }
+          selectedCropIds.add(idea.crop.id);
+          refreshCropSelection();
+          cropSearch.value=idea.crop.name;
+          renderCropOptions();
+          document.getElementById('crop-selection-section').scrollIntoView({behavior:'smooth',block:'center'});
+          document.getElementById('crop-selection-section').focus?.();
+        });
+        card.append(copy,add);list.append(card);
+      }
+      if(!ideas.length)list.append(asNode('p','No additional named research suggestions available from the small reference pool. You can search the complete crop list above.','hint'));
     }
 
     function trendFromSeasons(seasons) {
@@ -302,6 +351,7 @@ import { climateSeasons, recommend, cropProfile, MAX_CASH_CROPS } from "./rotati
       document.getElementById("farm-weather-chart").hidden=true;
       document.getElementById("farm-decision").hidden=true;
       document.getElementById("farm-actions").hidden=true;
+      document.getElementById("farm-expand-choices").hidden=true;
       document.getElementById("farm-climate-summary").replaceChildren(asNode("p","Weather observations will appear after you analyze the location.","hint"));
     }
     function updatePlans() {
@@ -312,12 +362,13 @@ import { climateSeasons, recommend, cropProfile, MAX_CASH_CROPS } from "./rotati
       try {
         const existing=[farm.existingCrop1, farm.existingCrop2].filter(Boolean);
         const result=recommend({selectedCrops:farm.selectedCrops,existingCropIds:existing,farm,climate:farmSeasons});
-        const plans=[...result.alternatives,...(result.baseline?[result.baseline]:[])];
-        planList.replaceChildren(...plans.map((p,i)=>renderPlan(p,i,p.id==="existing")));
+        const plans=[...(result.baseline?[result.baseline]:[]),...result.alternatives];
+        planList.replaceChildren(...plans.map((p,i)=>renderPlan(p,i,p.id==="existing",result.baseline,result.margin)));
         const candidateLabel=result.alternatives.length===1?"sequence":"sequences";
         resultStatus.textContent=`Screened ${result.candidateCount} distinct candidate cycles from your ${result.availableCash.length} chosen cash crops; showing ${result.alternatives.length} alternative ${candidateLabel} plus ${result.baseline?"your reported existing sequence":"no assumed baseline"}. NASA weather: ${result.seasonsUsed} complete ${seasonLabel()} seasons. Screening scores are NOT verified yields.`;
         document.getElementById("area-note").textContent=farm.area!==null&&farm.area>0?`Farm size: ${farm.area} ha (not used in suitability ranking).`:"Farm size is not used in suitability ranking.";
         renderDecision(result,farm);
+        renderCropExpansion(result,farm);
       }catch(e){resultStatus.textContent=e.message;planList.replaceChildren(makeElement("p","farm-caution",e.message));}
     }
 
@@ -341,6 +392,7 @@ import { climateSeasons, recommend, cropProfile, MAX_CASH_CROPS } from "./rotati
         planList.replaceChildren(makeElement("div", "empty-state", "Your rotation options will appear here. Add your farm details and required coordinates, then build your ideas."));
         resultStatus.textContent = "Add a few details, then build your rotation ideas. You can leave optional fields blank.";
         document.getElementById("area-note").textContent = "Farm size is used for context, not the score.";
+        document.getElementById("farm-expand-choices").hidden=true;
         selectedCropIds.clear();
         cropSearch.value = "";
         refreshCropSelection();

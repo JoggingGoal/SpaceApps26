@@ -168,9 +168,14 @@ export function scoreRotation(rotation,farm,seasons) {
  const profiles=rotation.crops.map(c=>cropProfile(c));
  const diversity=diversityMetrics(profiles);
  const soil=mean(profiles.map(c=>soilFitness(c,farm)));
- const adoption=clamp((rotation.id==='existing'?96:86)-9*Math.max(0,profiles.length-2)
+ const adoption=clamp(90-9*Math.max(0,profiles.length-2)
    - 9*profiles.filter(c=>c.perennial).length - 4*profiles.filter(c=>c.specificity==='broad').length);
- const stewardship=clamp(0.86*diversity.diversity + (diversity.legume?14:0));
+ // Each rotation gets the SAME baseline adoption rating. No hidden benefit for
+ // the existing system or automatic premium for a newly proposed system.
+ // Small, transparent succession consideration: a legume before a grass may
+ // support nutrient cycling, but this is NOT a quantified N credit.
+ const legumeBeforeGrass=profiles.filter((c,i)=>c.family==='Fabaceae' && profiles[(i+1)%profiles.length].family==='Poaceae').length;
+ const stewardship=clamp(0.86*diversity.diversity + (diversity.legume?10:0) + Math.min(4,legumeBeforeGrass*4));
  const weatherReference={rain:median(seasons.map(s=>s.rainfall)),
    hot:median(seasons.map(s=>s.hotDays)),dry:median(seasons.map(s=>s.drySpell))};
  const weights=WEIGHTS[farm.priority]||WEIGHTS.balanced;
@@ -183,12 +188,13 @@ export function scoreRotation(rotation,farm,seasons) {
  const worst=[...yearly].sort((a,b)=>a.score-b.score).slice(0,Math.max(1,Math.ceil(yearly.length/4)));
  const stressMean=mean(worst.map(y=>y.score));
  const score=Math.round(0.8*avg+0.2*stressMean);
- return {...rotation,profiles,diversity,soil:Math.round(soil),stewardship:Math.round(stewardship),adoption:Math.round(adoption),
+ return {...rotation,profiles,diversity,legumeBeforeGrass,soil:Math.round(soil),stewardship:Math.round(stewardship),adoption:Math.round(adoption),
   weather:Math.round(mean(yearly.map(y=>y.weather))),score,scoreAverage:+avg.toFixed(1),
   difficultSeasonScore:+stressMean.toFixed(1),years:yearly,knownProfiles:profiles.filter(p=>p.specificity==='named').length,
   profileCount:profiles.length,uncertainty:profiles.some(p=>p.specificity==='broad')?'higher':'moderate',weights};
 }
 export function recommend({selectedCrops,existingCropIds=[],farm={},climate=[],limit=4}) {
+ if (!Array.isArray(selectedCrops)) throw Error('Select at least two named cash crops');
  const unique=[...new Map(selectedCrops.map(c=>[c.id,c])).values()];
  const cash=unique.filter(c=>c.group!=='cover');const cover=unique.filter(c=>c.group==='cover');
  if(cash.length<2)throw Error('Select at least two named cash crops');
@@ -208,6 +214,43 @@ export function recommend({selectedCrops,existingCropIds=[],farm={},climate=[],l
   const set=c.crops.map(x=>x.id).sort().join('/');if(sets.has(set))continue;
   sets.add(set);chosen.push(c);if(chosen.length>=limit)break;
  }
- return {alternatives:chosen,baseline,candidateCount:candidates.length,availableCash:cash,coverCrops:cover,
+ return {alternatives:chosen,baseline,margin:4,candidateCount:candidates.length,availableCash:cash,coverCrops:cover,
   seasonsUsed:climate.length,warning:'Preference scores are uncalibrated screening indices, not estimates of yield, profitability, carbon sequestration, or an objectively optimal rotation.'};
+}
+
+
+/** Optional research ideas, NEVER auto-inserted into a proposed rotation.
+ * These are familiar species profiles, not regionally validated crop advice.
+ * The farmer has to explicitly add a crop to the allowed list.
+ */
+export function exploreCrops({catalog,selectedCrops=[],seasons=[],farm={},limit=3}) {
+ if (!Array.isArray(catalog) || !Array.isArray(seasons) || !seasons.length) return [];
+ const chosen=new Set(selectedCrops.map(c=>c.name.trim().toLowerCase()));
+ const chosenFamilies=new Set(selectedCrops.filter(c=>c.group!=='cover').map(c=>cropProfile(c).family));
+ const medDry=median(seasons.map(s=>s.drySpell));
+ const medHot=median(seasons.map(s=>s.hotDays));
+ const drier=farm.water==='limited'||medDry>=14;
+ const hotter=medHot>=20;
+ const possible=['Sorghum','Pearl millet','Chickpea','Cowpea','Soybean','Oats','Barley','Sunflower','Wheat','Buckwheat'];
+ const ranked=possible.map(name=>catalog.find(c=>c.name===name && c.group!=='cover'))
+  .filter(Boolean).filter(c=>!chosen.has(c.name.trim().toLowerCase()))
+  .map(c=>{
+   const p=cropProfile(c);if(p.specificity!=='named')return null;
+   const newFamily=!chosenFamilies.has(p.family);
+   const score=6*(newFamily?1:0)+5*(drier?p.droughtTolerance:p.waterNeed<.6?1:0)+
+    4*(hotter?p.heatTolerance:p.season==='cool'?1:0);
+   let reason=newFamily?`Adds a new botanical family (${p.family}) to investigate.`:`Offers another named species within ${p.family}.`;
+   if(drier&&p.droughtTolerance>=.7)reason+=' Its assumed drought-tolerance profile warrants a closer local check.';
+   else if(hotter&&p.heatTolerance>=.7)reason+=' Its heat-response assumptions are worth checking against local trials.';
+   else reason+=' Check growing-season fit, soil requirements, equipment and market access.';
+   return {crop:c,reason,score,newFamily};
+  }).filter(Boolean)
+  .sort((a,b)=>b.score-a.score || cmp(a.crop.name,b.crop.name));
+ const chosenIdeas=[],families=new Set();
+ for(const idea of ranked){
+  if(families.has(cropProfile(idea.crop).family)&&ranked.some(x=>!families.has(cropProfile(x.crop).family)))continue;
+  chosenIdeas.push(idea);families.add(cropProfile(idea.crop).family);
+  if(chosenIdeas.length>=limit)break;
+ }
+ return chosenIdeas;
 }

@@ -1,3 +1,14 @@
+# V6 final fairness fix (read first)
+
+- The **current rotation no longer receives a built-in adoption-score bonus**. All sequences use the same adoption formula, with complexity depending on their crop characteristics.
+- A **4-point difference or less** between an entered baseline and the leading alternative is treated as inconclusive. This is a practical display rule, **not a statistical confidence interval**.
+- The comparison shows the farmer-reported baseline first, followed by scored alternatives.
+- Optional named crop research ideas appear **separately, unscored and unselected**. Clicking Add is the only way an extra crop joins the allowed cash-crop list, and then the model re-runs. Names are shortlisting prompts, NOT validated local suitability recommendations.
+- A small 4-point maximum succession-screening term credits selected legumes followed by grasses, without assuming measured nitrogen fixation or fertilizer savings.
+- Outcomes remain uncalibrated preference indices, not evidence of increased profitability, yield, soil-carbon storage or guaranteed crop survival.
+
+---
+
 # Green Revolution: rotation recommendation model (v5)
 
 This prototype provides **transparent, reproducible screening comparisons**, not agronomic prescriptions or a validated optimization engine. It uses NASA POWER regional daily weather returned by the existing `/api/climate` route. There is no new API key, dependency, or server route. The numerical scoring code lives in `assets/js/rotation-engine.mjs` and is unit-tested with Node.

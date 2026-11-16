@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f5ec"><title>Crop Rotation Simulator | The Green Revolution</title><link rel="stylesheet" href="../assets/css/styles.css"><link rel="stylesheet" href="../assets/css/farm-planner.css"><script defer type="module" src="../assets/js/farm-planner.js?v=5"></script></head><body><div id="site-header"></div><main class="farm-page"><div id="farm-planner" class="farm-app"><div class="shell">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f5ec"><title>Crop Rotation Simulator | The Green Revolution</title><link rel="stylesheet" href="../assets/css/styles.css"><link rel="stylesheet" href="../assets/css/farm-planner.css"><script defer type="module" src="../assets/js/farm-planner.js?v=6"></script></head><body><div id="site-header"></div><main class="farm-page"><div id="farm-planner" class="farm-app"><div class="shell">
 
 <section aria-labelledby="page-title" class="hero">
 <div>
@@ -199,12 +199,13 @@
 </div>
 </form>
 <section aria-labelledby="results-heading" aria-live="polite" class="panel results-panel">
-<h2 class="results-title" id="results-heading">Your rotation recommendations</h2>
-<p class="results-subtitle">The comparison uses only your chosen cash crops. Scores rank your stated preferences under historical weather, not yield, profits or an agronomic optimum.</p>
+<h2 class="results-title" id="results-heading">Compare your crop-rotation options</h2>
+<p class="results-subtitle">Your existing sequence appears first when provided. Alternatives use only the crops you selected. A score difference of four points or less is treated as too close to favor a change. These are screening preferences, not predicted yields or an agricultural optimum.</p>
 <p class="result-status" id="result-status">Choose a city or enter coordinates, describe your farm, then analyze your options.</p><section aria-live="polite" class="farm-climate-summary" id="farm-climate-summary"><p class="hint">Historical climate measurements will appear after you select a location and analyze your farm.</p></section>
 <section aria-live="polite" class="farm-decision" hidden="" id="farm-decision"></section>
 <section class="farm-actions" hidden="" id="farm-actions"><h3>Your next steps</h3><div id="farm-action-list"></div></section>
-<section class="farm-weather-chart" hidden="" id="farm-weather-chart"><h3>Rainfall history behind this comparison</h3><div class="farm-annual-bars" id="farm-annual-bars"></div><p class="hint">April–September NASA POWER rainfall for the selected location; regional model/grid observations, not individual farm gauges.</p></section>
+<section class="farm-expand-choices" hidden id="farm-expand-choices"><h3>More crops to investigate, if you want</h3><p class="hint">The analysis above uses only crops you selected. These optional named crop ideas reflect very broad weather and diversity screening, not a determination that they are safe or profitable in your region. Nothing is added automatically. Click Add to consider one, then rerun the comparison.</p><div class="farm-expansion-list" id="farm-expansion-list"></div></section>
+   <section class="farm-weather-chart" hidden="" id="farm-weather-chart"><h3>Rainfall history behind this comparison</h3><div class="farm-annual-bars" id="farm-annual-bars"></div><p class="hint">NASA POWER rainfall for your chosen growing-season months; regional model/grid observations, not individual farm gauges.</p></section>
 
 <div class="plan-list" id="plan-list">
 <div class="empty-state">First choose at least two crops in the required crop picker, then analyze your farm.</div>

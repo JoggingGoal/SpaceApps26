@@ -1,0 +1,11 @@
+THE GREEN REVOLUTION: FINAL RECOMMENDATION CLARITY FIX (V6)
+
+1. Save existing project / commit current GitHub changes.
+2. Upload this ZIP into Codespaces root (SpaceApps26), stop python3 app.py with Ctrl+C, then: unzip -o Green_Revolution_Final_Recommendation_Fix.zip
+3. Restart: python3 app.py ; hard-refresh browser Ctrl+Shift+R.
+4. Render: commit and push changed files to main, then check Render auto-deployment. If Codespaces is unavailable, upload the extracted FILES with their exact folders to GitHub using Add file -> Upload files and commit to main.
+5. Test at SIMULATIONS/simulations.html with two crops, then add a third, select existing rotation, check whether top score is a meaningful difference.
+
+PATCHED FILES ONLY: SIMULATIONS/simulations.html; assets/js/farm-planner.js; assets/js/rotation-engine.mjs; assets/css/farm-planner.css; tests/rotation-engine.test.mjs; ROTATION_MODEL.md.
+
+No Python server changes. No homepage, map, or science page changes.
