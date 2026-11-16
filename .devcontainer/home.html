@@ -232,9 +232,7 @@
           <h3 class="subsection-title" id="climate-heading">Climate &amp; field signals</h3>
           <div class="field wide nasa-fetch">
             <p class="hint" id="nasa-status" role="status" aria-live="polite">NASA climate and vegetation data load automatically when you build rotation ideas. Required coordinates are sent only for that request.</p>
-            <p class="hint">Source: <a href="https://power.larc.nasa.gov/docs/services/api/temporal/monthly/" target="_blank" rel="noopener noreferrer">NASA POWER monthly API ↗</a></p>
             <p class="hint" id="ndvi-status" role="status" aria-live="polite">MODIS NDVI trend will be calculated from quality-screened satellite observations when you build rotation ideas.</p>
-            <p class="hint">Vegetation source: <a href="https://modis.ornl.gov/data/modis_webservice.html" target="_blank" rel="noopener noreferrer">NASA ORNL DAAC MODIS service ↗</a></p>
           </div>
           <div class="fields">
             <div class="field">
@@ -609,14 +607,9 @@
         : "Farm size is used for context, not the score.";
     }
 
-    form.addEventListener("submit", async (event) => {
+    form.addEventListener("submit", (event) => {
       event.preventDefault();
-      if (!form.reportValidity() || nasaRequestInProgress) return;
-      const coordinateKey = `${Number(latitude.value).toFixed(5)},${Number(longitude.value).toFixed(5)}`;
-      if (loadedNasaCoordinates !== coordinateKey && !(await loadNasaData())) {
-        resultStatus.textContent = "NASA climate data could not be loaded, so rotation ideas were not updated. Check your connection and try again.";
-        return;
-      }
+      if (!form.reportValidity()) return;
       hasGenerated = true;
       updatePlans();
     });
